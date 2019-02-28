@@ -1,78 +1,70 @@
 import processing.sound.*;
 
 SinOsc sine;
-int[] bezierLine = { 0,0, 100,100, 300,300, 400,400 };
-float count;
-int lastFlash = 0;
-int lastHit = 0;
-boolean isFlashing = false;
+Strands knowledge;
+
 boolean hit = false;
+color bgColour = color(255);
+int lastFinished = 0;
 
 void setup() {
-    size(600, 600, P2D);
-    background(0);
+    fullScreen(P2D);
+    //size(600, 600, P2D);
+    pixelDensity(displayDensity());
 
-    count = 0;
     sine = new SinOsc(this);
     sine.amp(0);
     sine.play();
+
+    knowledge = new Strands(this);
 }
 
 void draw() {
-    background(0);
-    count += 1;
-    bezierLine[0] += random(100) > 50 ? 10 : -10;
+    background(bgColour);
 
-    noFill();
+    knowledge.update();
+    knowledge.draw();
 
-    if (hit) {
-        background(255);
-
-        if (millis() - lastHit > 1000) {
-            hit = false;
-        }
+    if (knowledge.isFinished() && lastFinished == 0) {
+        lastFinished = millis();
     }
 
-    if (isFlashing) {
-        flash();
+    if ((millis() - lastFinished > 5000) && (knowledge.isFinished())) {
+        setupRestart();
     }
 
-    // if is flashing and has been doing so for the last 2000ms, stop flashing
-    if (isFlashing == true && millis() - lastFlash > 200) {
-        isFlashing = false;
+    if ((millis() - lastFinished > 2000) && (knowledge.isFinished())) {
+        restart();
     }
+}
 
-    // if is not flashing and hasn't done so in 2000ms, start flashing
-    if (isFlashing == false && millis() - lastFlash > 2000) {
-        lastFlash = millis();
-        isFlashing = true;
-    }
+void setupRestart() {
+    knowledge.destroy();
+    background(bgColour);
+}
 
-
+void restart() {
+    exit();
+    knowledge = new Strands(this);
+    lastFinished = 0;
 }
 
 void keyReleased() {
     sine.amp(0);
+    bgColour = color(255);
+    knowledge.distortHitStrand(keyCode);
 }
 
 void keyPressed() {
-    background(255, random(255), random(255));
+    bgColour = color(255, random(255), random(255));
     sine.freq(keyCode * 5);
     sine.amp(0.5);
 
-    if (isFlashing) {
+    if (knowledge.isFlashing) {
         hit = true;
-        lastHit = millis();
+        bgColour = color(0);
+        knowledge.hit();
     }
-}
 
-void flash() {
-    stroke(255);
-    bezier(bezierLine[0], bezierLine[1], bezierLine[2], bezierLine[3],
-           bezierLine[4], bezierLine[5], bezierLine[6], bezierLine[7]);
-
-    bezier(bezierLine[1], bezierLine[0], bezierLine[6], bezierLine[7],
-           width, bezierLine[5], bezierLine[3], bezierLine[2]);
-
-
+    knowledge.lastFlash = millis();
 }

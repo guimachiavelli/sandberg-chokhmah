@@ -1,5 +1,5 @@
 # Quotes
-> Chokhmah is associated in the soul with the power of intuitive insight, flashing lightning-like across consciousness.
+> Chokhmah is associated in the soul with the power of intuitive insight, flashing lightning-like across consciousness. 
 
 > The "wisdom" of Chokhmah also implies the ability to look deeply at some aspect of reality and abstract its conceptual essence till one succeeds in uncovering its underlying axiomatic truth. 
 
@@ -16,9 +16,9 @@ A rhythm game in which the user needs to press a button (any button?) as the scr
 The proof-of-concept prototype I came up with this afternoon works as such: on a black background, white curves flash regularly. By pressing buttons on the keyboard, the screen flashes with a random colour and makes a sound depending on the pressed key. If a button is pressed whilst the white curves are flashing, the screen goes white for a second or two.
 
 I can see a few possible improvements:
-* associate sounds with each curve;
-* show only one curve at a time;
-* once someone matches a curve, it stays on screen;
+* ✓ associate sounds with each curve;
+* ✓ show only one curve at a time;
+* ✓ once someone matches a curve, it stays on screen;
 * once all curves are matched, the game ends;
 * bonus: movement detection -- instead of using keyboards, use the built-in camera to detect movement (more of a boolean thing at first, potentially getting a bit more input on location or speed of movement)
 
